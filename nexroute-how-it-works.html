@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NexRoute — How one delivery works</title>
+<style>
+  :root {
+    --ink: #1a2330;
+    --muted: #5c6b7a;
+    --line: #d7e0e6;
+    --green: #0aa06e;
+    --blue: #2b6cb0;
+    --amber: #d97706;
+    --red: #c2413a;
+    --purple: #6d28d9;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: #eef2f4;
+    color: var(--ink);
+    font-family: "Segoe UI", "DejaVu Sans", sans-serif;
+  }
+  .slide {
+    width: 1440px;
+    height: 900px;
+    margin: 24px auto;
+    background: #f7f8f6;
+    padding: 28px 36px 24px;
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    gap: 14px;
+  }
+  header { display: flex; justify-content: space-between; align-items: flex-end; }
+  h1 { margin: 0; font-size: 34px; letter-spacing: -0.4px; }
+  h1 span { color: var(--green); }
+  .sub { margin: 4px 0 0; color: var(--muted); font-size: 16px; }
+  .badge {
+    background: #1a2330; color: white; border-radius: 999px;
+    padding: 8px 14px; font-size: 13px; font-weight: 700; letter-spacing: .4px;
+  }
+  .rule {
+    background: white; border: 1px solid var(--line); border-radius: 12px;
+    padding: 10px 16px; font-size: 15px;
+  }
+  .rule b { color: var(--green); }
+  .main { display: grid; grid-template-columns: 1.35fr .85fr; gap: 16px; min-height: 0; }
+  .card {
+    background: white; border: 1px solid var(--line); border-radius: 16px;
+    padding: 14px 16px;
+  }
+  .card h2 { margin: 0 0 8px; font-size: 15px; letter-spacing: .6px; text-transform: uppercase; color: var(--muted); }
+  svg { width: 100%; height: 520px; display: block; }
+  ol { margin: 0; padding: 0; list-style: none; }
+  li {
+    display: grid; grid-template-columns: 28px 1fr; gap: 10px;
+    padding: 7px 0; border-bottom: 1px solid #eef2f4; font-size: 15px; line-height: 1.35;
+  }
+  li:last-child { border-bottom: 0; }
+  .n {
+    width: 28px; height: 28px; border-radius: 50%; color: white;
+    display: grid; place-items: center; font-weight: 800; font-size: 13px;
+  }
+  .g { background: var(--green); } .b { background: var(--blue); } .a { background: var(--amber); }
+  .roles { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  .role { background: white; border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
+  .role strong { display: block; font-size: 14px; margin-bottom: 2px; }
+  .role span { color: var(--muted); font-size: 13px; }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+</style>
+</head>
+<body>
+<div class="slide">
+  <header>
+    <div>
+      <h1>NexRoute <span>how one delivery works</span></h1>
+      <p class="sub">Fixed tape route only. No map. RFID names the node. The line moves the robot.</p>
+    </div>
+    <div class="badge">X → Y ONLY</div>
+  </header>
+
+  <div class="rule">
+    Saved turns at J1: <b>Left to X</b> · <b>Left to Y</b> · <b>Straight back to Base</b>.
+    A tag that is not the expected one is ignored. The robot waits for a person at X and at Y.
+  </div>
+
+  <div class="main">
+    <div class="card">
+      <h2>Track — 3-way junction</h2>
+      <svg viewBox="0 0 820 520" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="g" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L7,3 L0,6 Z" fill="#0aa06e"/>
+          </marker>
+          <marker id="b" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L7,3 L0,6 Z" fill="#2b6cb0"/>
+          </marker>
+          <marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L7,3 L0,6 Z" fill="#d97706"/>
+          </marker>
+        </defs>
+
+        <!-- tape -->
+        <path d="M410 430 V250 H150" fill="none" stroke="#1a2330" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M410 250 V70" fill="none" stroke="#1a2330" stroke-width="18" stroke-linecap="round"/>
+
+        <!-- leg 1 base -> J1 -> X -->
+        <path d="M438 410 V268 H175" fill="none" stroke="#0aa06e" stroke-width="5" marker-end="url(#g)"/>
+        <!-- leg 2 X -> J1 -> Y -->
+        <path d="M175 232 H392 V95" fill="none" stroke="#2b6cb0" stroke-width="5" marker-end="url(#b)"/>
+        <!-- leg 3 Y -> J1 -> base, straight -->
+        <path d="M410 95 V410" fill="none" stroke="#d97706" stroke-width="5" stroke-dasharray="7 6" marker-end="url(#a)"/>
+
+        <!-- base marker -->
+        <rect x="360" y="418" width="100" height="36" rx="6" fill="#1a2330"/>
+        <text x="410" y="441" text-anchor="middle" fill="white" font-size="13" font-weight="700">BASE</text>
+        <text x="410" y="478" text-anchor="middle" fill="#5c6b7a" font-size="13">wide black marker · all 8 IR</text>
+        <text x="410" y="496" text-anchor="middle" fill="#5c6b7a" font-size="13">no RFID here</text>
+
+        <!-- J1 -->
+        <circle cx="410" cy="250" r="28" fill="#6d28d9"/>
+        <text x="410" y="246" text-anchor="middle" fill="white" font-size="13" font-weight="800">J1</text>
+        <text x="410" y="262" text-anchor="middle" fill="white" font-size="10">key ring</text>
+        <text x="560" y="214" fill="#6d28d9" font-size="14" font-weight="700">From Base: LEFT → X</text>
+        <text x="560" y="236" fill="#2b6cb0" font-size="14" font-weight="700">From X: LEFT → Y</text>
+        <text x="560" y="258" fill="#d97706" font-size="14" font-weight="700">From Y: STRAIGHT → Base</text>
+        <text x="560" y="284" fill="#5c6b7a" font-size="13">Tag says “this is J1”.</text>
+        <text x="560" y="302" fill="#5c6b7a" font-size="13">The saved rule says the turn.</text>
+
+        <!-- X -->
+        <rect x="78" y="214" width="72" height="72" rx="10" fill="#0aa06e"/>
+        <text x="114" y="246" text-anchor="middle" fill="white" font-size="20" font-weight="800">X</text>
+        <text x="114" y="266" text-anchor="middle" fill="white" font-size="11">Card 1</text>
+        <text x="114" y="312" text-anchor="middle" fill="#1a2330" font-size="13" font-weight="700">stop · load tray</text>
+        <text x="114" y="330" text-anchor="middle" fill="#5c6b7a" font-size="12">then 180° and leave</text>
+
+        <!-- Y -->
+        <rect x="374" y="28" width="72" height="72" rx="10" fill="#2b6cb0"/>
+        <text x="410" y="60" text-anchor="middle" fill="white" font-size="20" font-weight="800">Y</text>
+        <text x="410" y="80" text-anchor="middle" fill="white" font-size="11">Card 2</text>
+        <text x="500" y="58" fill="#1a2330" font-size="13" font-weight="700">stop · take item</text>
+        <text x="500" y="76" fill="#5c6b7a" font-size="12">then 180° and go home</text>
+
+        <text x="250" y="400" fill="#0aa06e" font-size="13" font-weight="700">1  go to X</text>
+        <text x="250" y="188" fill="#2b6cb0" font-size="13" font-weight="700">2  go to Y</text>
+        <text x="430" y="360" fill="#d97706" font-size="13" font-weight="700">3  return</text>
+      </svg>
+    </div>
+
+    <div class="card">
+      <h2>What happens, in order</h2>
+      <ol>
+        <li><div class="n a">1</div><div>Robot waits on the wide black marker. State: <b>STANDBY</b>. It does not move.</div></li>
+        <li><div class="n g">2</div><div>Phone opens <b>192.168.4.1</b> and calls <b>X → Y</b>. Any other pair is rejected.</div></li>
+        <li><div class="n g">3</div><div>IR array follows the tape. At the key ring, J1 is recognized and the robot turns <b>left</b> toward X.</div></li>
+        <li><div class="n g">4</div><div>Card 1 means X. Robot stops. Sender puts the item on the open tray and presses <b>Item Loaded</b>.</div></li>
+        <li><div class="n b">5</div><div>Robot spins 180°, follows the tape back, reads J1 again, and turns <b>left</b> toward Y.</div></li>
+        <li><div class="n b">6</div><div>Card 2 means Y. Robot stops. Receiver takes the item and presses <b>Received</b>.</div></li>
+        <li><div class="n a">7</div><div>Robot spins 180°, goes <b>straight</b> through J1, sees all 8 sensors black, and returns to <b>STANDBY</b>.</div></li>
+      </ol>
+      <p class="sub" style="margin-top:10px">If something is within 15 cm, motors stop and the buzzer sounds. When the path is clear, the same leg continues. Cancel on the page stops the job immediately.</p>
+    </div>
+  </div>
+
+  <div class="roles">
+    <div class="role"><strong><i class="dot" style="background:#1a2330"></i>IR array</strong><span>Keeps the robot on the black tape. Also sees the base marker.</span></div>
+    <div class="role"><strong><i class="dot" style="background:#6d28d9"></i>RFID</strong><span>Names the node only: J1, X, or Y. It does not choose a direction.</span></div>
+    <div class="role"><strong><i class="dot" style="background:#0aa06e"></i>Turn rule</strong><span>Three saved letters: L, L, S. This replaces a map.</span></div>
+    <div class="role"><strong><i class="dot" style="background:#c2413a"></i>Ultrasonic</strong><span>Safety stop under 15 cm. It does not steer around the object.</span></div>
+    <div class="role"><strong><i class="dot" style="background:#2b6cb0"></i>Web page</strong><span>Call, Item Loaded, Received. No database and no lock.</span></div>
+  </div>
+</div>
+</body>
+</html>
